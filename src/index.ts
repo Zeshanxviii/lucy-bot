@@ -70,7 +70,7 @@ async function onboarding(conversation: Conversation<MyContext>, ctx: MyContext)
 
     await langResponse.answerCallbackQuery("Language set!");
     await ctx.reply(
-        `✅ Profile complete!\n` +
+        `Profile complete!\n` +
         `Name: ${name}\n` +
         `Interests: ${interests.join(', ')}\n` +
         `Language: ${lang}\n\n` +
@@ -88,27 +88,27 @@ async function quiz(conversation: Conversation<MyContext>, ctx: MyContext) {
     const q1 = await conversation.wait();
     if (q1.message?.text === "4") {
         score++;
-        await ctx.reply("✅ Correct!");
+        await ctx.reply("Correct!");
     } else {
-        await ctx.reply("❌ Wrong! The answer is 4.");
+        await ctx.reply("Wrong! The answer is 4.");
     }
 
     await ctx.reply("Question 2: What is the capital of France?");
     const q2 = await conversation.wait();
     if (q2.message?.text?.toLowerCase() === "paris") {
         score++;
-        await ctx.reply("✅ Correct!");
+        await ctx.reply("Correct!");
     } else {
-        await ctx.reply("❌ Wrong! The answer is Paris.");
+        await ctx.reply("Wrong! The answer is Paris.");
     }
 
     await ctx.reply("Question 3: How many continents are there?");
     const q3 = await conversation.wait();
     if (q3.message?.text === "7") {
         score++;
-        await ctx.reply("✅ Correct!");
+        await ctx.reply("Correct!");
     } else {
-        await ctx.reply("❌ Wrong! The answer is 7.");
+        await ctx.reply("Wrong! The answer is 7.");
     }
 
     ctx.session.quizScore += score;
@@ -144,7 +144,7 @@ async function setReminder(conversation: Conversation<MyContext>, ctx: MyContext
     const reminderTime = new Date(Date.now() + minutes * 60 * 1000);
     ctx.session.reminders.push({ text: reminderText, time: reminderTime });
 
-    await ctx.reply(`⏰ Reminder set! I'll remind you about "${reminderText}" in ${minutes} minute(s).`);
+    await ctx.reply(`Reminder set! I'll remind you about "${reminderText}" in ${minutes} minute(s).`);
 
     // Set actual reminder
     setTimeout(() => {
@@ -156,21 +156,21 @@ bot.use(createConversation(setReminder));
 
 // Interactive Menu
 const menu = new Menu<MyContext>("main-menu")
-    .text("📊 My Stats", async (ctx) => {
+    .text("My Stats", async (ctx) => {
         const stats = `
-📈 Your Statistics:
+Your Statistics:
 ━━━━━━━━━━━━━━━━
 👤 Name: ${ctx.session.userData.name || 'Not set'}
-💬 Messages sent: ${ctx.session.messageCount}
-⚡ Last command: ${ctx.session.lastCommand || 'None'}
-🎯 Interests: ${ctx.session.userData.interests?.join(', ') || 'None'}
-🌍 Language: ${ctx.session.userData.language || 'Not set'}
-🏆 Quiz score: ${ctx.session.quizScore}
-⭐ Favorites: ${ctx.session.favoriteMessages.length}
+Messages sent: ${ctx.session.messageCount}
+Last command: ${ctx.session.lastCommand || 'None'}
+Interests: ${ctx.session.userData.interests?.join(', ') || 'None'}
+Language: ${ctx.session.userData.language || 'Not set'}
+Quiz score: ${ctx.session.quizScore}
+Favorites: ${ctx.session.favoriteMessages.length}
     `.trim();
         await ctx.reply(stats);
     }).row()
-    .text("🎲 Random Fact", async (ctx) => {
+    .text("Random Fact", async (ctx) => {
         const facts = [
             "Honey never spoils. Archaeologists have found 3000-year-old honey that's still edible!",
             "A group of flamingos is called a 'flamboyance'.",
@@ -322,7 +322,7 @@ bot.command("weather", async (ctx) => {
     const condition = conditions[Math.floor(Math.random() * conditions.length)];
 
     await ctx.reply(
-        `🌤️ *Weather in ${city}*\n\n` +
+        ` *Weather in ${city}*\n\n` +
         `Temperature: ${temp}°C\n` +
         `Conditions: ${condition}\n` +
         `Humidity: ${Math.floor(Math.random() * 40) + 40}%\n\n` +
@@ -345,7 +345,7 @@ bot.command("joke", async (ctx) => {
         "What do you call a programmer from Finland? Nerdic!"
     ];
 
-    await ctx.reply(`😄 ${jokes[Math.floor(Math.random() * jokes.length)]}`);
+    await ctx.reply(` ${jokes[Math.floor(Math.random() * jokes.length)]}`);
 });
 
 // Command: Calculate
@@ -356,7 +356,7 @@ bot.command("calculate", async (ctx) => {
 
     if (!args || args.length < 3) {
         return ctx.reply(
-            "📐 Calculator Usage:\n\n" +
+            " Calculator Usage:\n\n" +
             "/calculate <number> <operator> <number>\n\n" +
             "Example: /calculate 10 + 5\n" +
             "Operators: +, -, *, /"
@@ -368,7 +368,7 @@ bot.command("calculate", async (ctx) => {
     const num2 = parseFloat(args[2]);
 
     if (isNaN(num1) || isNaN(num2)) {
-        return ctx.reply("❌ Invalid numbers provided!");
+        return ctx.reply(" Invalid numbers provided!");
     }
 
     let result: number;
@@ -384,15 +384,15 @@ bot.command("calculate", async (ctx) => {
             break;
         case '/':
             if (num2 === 0) {
-                return ctx.reply("❌ Cannot divide by zero!");
+                return ctx.reply("Cannot divide by zero!");
             }
             result = num1 / num2;
             break;
         default:
-            return ctx.reply("❌ Invalid operator! Use +, -, *, or /");
+            return ctx.reply("Invalid operator! Use +, -, *, or /");
     }
 
-    await ctx.reply(`📐 ${num1} ${operator} ${num2} = *${result}*`, { parse_mode: "Markdown" });
+    await ctx.reply(` ${num1} ${operator} ${num2} = *${result}*`, { parse_mode: "Markdown" });
 });
 
 // Command: Save message to favorites
@@ -400,13 +400,13 @@ bot.command("save", async (ctx) => {
     ctx.session.lastCommand = '/save';
 
     if (!ctx.message?.reply_to_message?.text) {
-        return ctx.reply("⚠️ Please reply to a message with /save to add it to your favorites!");
+        return ctx.reply("Please reply to a message with /save to add it to your favorites!");
     }
 
     const messageText = ctx.message.reply_to_message.text;
     ctx.session.favoriteMessages.push(messageText);
 
-    await ctx.reply(`⭐ Message saved to favorites! You now have ${ctx.session.favoriteMessages.length} favorite message(s).`);
+    await ctx.reply(`Message saved to favorites! You now have ${ctx.session.favoriteMessages.length} favorite message(s).`);
 });
 
 // Callback query handlers
@@ -440,9 +440,9 @@ bot.callbackQuery("help", async (ctx) => {
 });
 
 bot.callbackQuery("about", async (ctx) => {
-    await ctx.answerCallbackQuery("Made with Grammy 💚");
+    await ctx.answerCallbackQuery("Made with Grammy");
     await ctx.reply(
-        "🤖 *About This Bot*\n\n" +
+        " *About This Bot*\n\n" +
         "Built with Grammy framework\n" +
         "Version: 2.0.0\n" +
         "Features: Advanced middleware, conversations, analytics, games, and more!\n\n" +
@@ -480,18 +480,18 @@ bot.on("message:text", (ctx) => {
 
     // Echo back with encouragement
     const encouragements = [
-        "Interesting message! 🤔",
-        "Got it! 👍",
-        "Message received! ✅",
-        "Thanks for sharing! 💬",
-        "Noted! 📝"
+        "Interesting message! ",
+        "Got it! ",
+        "Message received! ",
+        "Thanks for sharing! ",
+        "Noted! "
     ];
 
     const encouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
 
     ctx.reply(
         `${encouragement}\n\n` +
-        `💬 Message #${ctx.session.messageCount}\n` +
+        `Message #${ctx.session.messageCount}\n` +
         `Try /menu for interactive features!`
     );
 });
@@ -533,7 +533,7 @@ bot.on("message:location", (ctx) => {
     ctx.session.messageCount++;
     const lat = ctx.message.location.latitude;
     const lon = ctx.message.location.longitude;
-    return ctx.reply(`📍 Location received!\nLatitude: ${lat}\nLongitude: ${lon}\n\nThanks for sharing your location!`);
+    return ctx.reply(`Location received!\nLatitude: ${lat}\nLongitude: ${lon}\n\nThanks for sharing your location!`);
 });
 
 // Error handling
@@ -542,7 +542,7 @@ bot.catch((err) => {
     console.error(`Error while handling update ${ctx.update.update_id}:`);
     console.error(err.error);
 
-    ctx.reply("⚠️ An error occurred. Please try again or contact support.");
+    ctx.reply("An error occurred. Please try again or contact support.");
 });
 
 // Graceful shutdown
@@ -559,7 +559,7 @@ process.once("SIGTERM", () => {
 // Start the bot
 bot.start()
     .then(() => {
-        console.log("🚀 Bot is running!");
+        console.log("Bot is running!");
         console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
         console.log("Features enabled:");
         console.log("  ✓ Session management");
@@ -578,6 +578,6 @@ bot.start()
         console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
     })
     .catch((err) => {
-        console.error("❌ Bot failed to start:", err);
+        console.error("Bot failed to start:", err);
         process.exit(1);
     });
